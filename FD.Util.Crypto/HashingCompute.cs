@@ -36,7 +36,7 @@ namespace FD.Util.Crypto
         /// </summary>       
         /// <param name="bytes">The bytes.</param>
         /// <returns></returns>
-        public static string CalMd5(string strFilePath)
+        public static string CalMd5File(string strFilePath)
         {
             using (MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider())
             {
@@ -52,6 +52,28 @@ namespace FD.Util.Crypto
                 }
             }
         }
+
+        /// <summary>
+        /// MD5字符串加密
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <returns>加密后字符串</returns>
+        public static string CalMd5(string txt)
+        {
+            using (MD5 mi = MD5.Create())
+            {
+                byte[] buffer = Encoding.Default.GetBytes(txt);
+                //开始加密
+                byte[] newBuffer = mi.ComputeHash(buffer);
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < newBuffer.Length; i++)
+                {
+                    sb.Append(newBuffer[i].ToString("x2"));
+                }
+                return sb.ToString();
+            }
+        }
+
 
         /// <summary>
         /// Cals the sha1.
