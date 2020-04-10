@@ -42,6 +42,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BuildExcel.cs" />
+    <Compile Include="Checker\EntityProperty.cs" />
+    <Compile Include="Checker\ExcelCheckError.cs" />
+    <Compile Include="Checker\ExcelColumn.cs" />
+    <Compile Include="Checker\ExcelColumnStructure.cs" />
+    <Compile Include="Checker\ExcelSheetStructure.cs" />
+    <Compile Include="Checker\ExcelStructure.cs" />
+    <Compile Include="Checker\TemplateColumnRule.cs" />
+    <Compile Include="Checker\TemplateRule.cs" />
+    <Compile Include="Checker\TemplateSheetDBTable.cs" />
+    <Compile Include="Checker\TemplateSheetRule.cs" />
+    <Compile Include="ExcelChecker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -49,5 +60,6 @@
       <Version>2.4.1</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

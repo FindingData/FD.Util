@@ -43,12 +43,12 @@ namespace FD.Util.Excel
         /// <summary>
         /// 当前单元
         /// </summary>
-        private HSSFCell currentCell = null;
+        //private HSSFCell currentCell = null;
 
         /// <summary>
         /// 单元样式
         /// </summary>
-        private ICellStyle cellStyle = null;
+        //private ICellStyle cellStyle = null;
 
 
         #region 页操作
@@ -112,17 +112,10 @@ namespace FD.Util.Excel
 
         public void SaveAs(string filename)
         {
-            try
+            using (FileStream file = new FileStream(filename, FileMode.Create))
             {
-                using (FileStream file = new FileStream(filename, FileMode.Create))
-                {
-                    workbook.Write(file);
-                    file.Close();
-                }
-            }
-            catch (IOException ex)
-            {
-
+                workbook.Write(file);
+                file.Close();
             }
         }
 
