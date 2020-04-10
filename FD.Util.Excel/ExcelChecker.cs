@@ -34,7 +34,7 @@ namespace FD.Util.Excel
      
 
 
-        private decimal _customerId;
+  
 
         private int _checkType=0;
 
@@ -96,9 +96,8 @@ namespace FD.Util.Excel
 
         public ExcelChecker() { }
 
-        public ExcelChecker(decimal customerId, Stream stream)
+        public ExcelChecker(Stream stream)
         {
-            _customerId = customerId;
             _excelStream = stream;
         }
 

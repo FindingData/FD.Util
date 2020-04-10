@@ -7,14 +7,15 @@ using System.Threading.Tasks;
 namespace FD.Util.Excel
 {
     public class TemplateRule
-    {
-        //模板ID
-        public decimal TemplateID;
-
+    {       
         //模板名称
         public string TemplateName;
         
         //模版规则
+        public TemplateRule(string templateName)
+        {
+            this.TemplateName = templateName;
+        }
 
         public TemplateSheetRule TemplateSheetRule = new TemplateSheetRule();
 

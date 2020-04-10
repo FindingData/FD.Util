@@ -21,7 +21,7 @@ namespace FD.Util.Excel
         /// <summary>
         /// 关联的序列
         /// </summary>
-        public string DB_SEQ { get; set; }
+        //public string DB_SEQ { get; set; }
 
         /// <summary>
         /// 关联的列集
