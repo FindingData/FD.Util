@@ -10,54 +10,59 @@ namespace FD.Util.Crypto
 {
     public static class DESHelper
     {
+
         /// <summary>
-        /// DES加密的密钥结构
+        /// Secret key size in bits.
         /// </summary>
-        public struct DESKey
-        {
-            public string Key { get; set; }
+        private const int _keySize = 64;
 
-            public string IV { get; set; }
-        }
-
-
-
-        public static DESKey GetDesKey()
-        {
-            DESCryptoServiceProvider desProvider = new DESCryptoServiceProvider();
-            return new DESKey()
-            {
-                Key = Encoding.ASCII.GetString(desProvider.Key),
-                IV = Encoding.ASCII.GetString(desProvider.IV),
-            };
-        }
-
-        public static DESKey Get3DesKey()
-        {
-            TripleDESCryptoServiceProvider desProvider = new TripleDESCryptoServiceProvider();
-            return new DESKey()
-            {
-                Key = Encoding.ASCII.GetString(desProvider.Key),
-                IV = Encoding.ASCII.GetString(desProvider.IV),
-            };
-        }
+        /// <summary>
+        /// Secret key size in bits.
+        /// </summary>
+        private const int _3KeySize = 128;
+        /// <summary>
+        /// Initialization Vector length in bytes.
+        /// </summary>
+        private const int _ivLength = 8;
+        /// <summary>
+        /// Padding for rounding byte count before encryption.
+        /// </summary>
+        /// <remarks>PaddingModes Zeros and None does not work.</remarks>
+        private const PaddingMode _paddingMode = PaddingMode.PKCS7;
 
 
 
+        /// <summary>
+        /// Des加密函数
+        /// </summary>
+        /// <param name="strPlain"></param>
+        /// <param name="strKey"></param>
+        /// <returns></returns>
         public static string Encrypt(string strPlain,string strKey)
         {
-            return Encrypt(strPlain, strKey);
+            var iv = CryptoHelper.GenerateIv(8);
+
+            var cipher = Encrypt(strPlain, Encoding.UTF8.GetBytes(strKey), iv);
+
+            var encrypted = CryptoHelper.CombineIvData(iv, Convert.FromBase64String(cipher), _ivLength);
+
+            return Convert.ToBase64String(encrypted);
+
         }
 
         /// <summary>
-        /// 解密原函数
+        /// Des解密函数
         /// </summary>
         /// <param name="pToDecrypt"></param>
         /// <param name="sKey"></param>
         /// <returns></returns>
         public static string Decrypt(string strCipher, string strKey)
         {
-            return Decrypt(strCipher, strKey, strKey);
+            var iv = CryptoHelper.GetIv(Convert.FromBase64String(strCipher), _ivLength);
+
+            var encrypted = CryptoHelper.RemoveIv(Convert.FromBase64String(strCipher), _ivLength);
+
+            return Decrypt(Convert.ToBase64String(encrypted), Encoding.UTF8.GetBytes(strKey), iv);
         }
 
 
@@ -67,24 +72,39 @@ namespace FD.Util.Crypto
         /// <param name="pToEncrypt"></param>
         /// <param name="sKey"></param>
         /// <returns></returns>
-        public static string Encrypt(string strPlain, string strKey, string strIV)
+        public static string Encrypt(string strPlain, byte[] key, byte[] iv)
         {
-            DESCryptoServiceProvider des = new DESCryptoServiceProvider();            
-            byte[] inputByteArray = Encoding.Default.GetBytes(strPlain);
-            des.Key = ASCIIEncoding.Default.GetBytes(strKey);
-            des.IV = ASCIIEncoding.Default.GetBytes(strIV);
-            MemoryStream ms = new MemoryStream();
-            CryptoStream cs = new CryptoStream(ms, des.CreateEncryptor(), CryptoStreamMode.Write);
-            cs.Write(inputByteArray, 0, inputByteArray.Length);
-            cs.FlushFinalBlock();
-            StringBuilder ret = new StringBuilder();
-            foreach (byte b in ms.ToArray())
+            byte[] encrypted;            
+            using (var des = new DESCryptoServiceProvider())
             {
-                ret.AppendFormat("{0:X2}", b);
+                des.Key = key;
+                des.IV = iv;
+
+                des.Padding = _paddingMode;
+                des.KeySize = _keySize;
+
+                using (var ms = new MemoryStream())
+                using (var encryptor = des.CreateEncryptor())
+                {
+                    using (var cryptoStream = new CryptoStream(ms, encryptor,
+                        CryptoStreamMode.Write))
+                    {
+                        // Convert to bytes
+                        byte[] textBytes = Encoding.UTF8.GetBytes(strPlain);
+                        cryptoStream.Write(textBytes, 0, textBytes.Length);
+                    }
+                    //encrypted = ms.ToArray();
+                    StringBuilder ret = new StringBuilder();
+                    //decrypted = ms.ToArray();
+                    foreach (byte b in ms.ToArray())
+                    {
+                        ret.AppendFormat("{0:X2}", b);
+                    }
+                    ret.ToString();
+                    return ret.ToString();
+                }
             }
-            ret.ToString();
-            return ret.ToString();
-            //return a;
+            //return Convert.ToBase64String(encrypted);
         }
 
         /// <summary>
@@ -94,23 +114,42 @@ namespace FD.Util.Crypto
         /// <param name="strKey"></param>
         /// <param name="strIV"></param>
         /// <returns></returns>
-        public static string Decrypt(string strCipher, string strKey, string strIV)
+        public static string Decrypt(string strCipher, byte[] key,byte[] iv)
         {
-            DESCryptoServiceProvider des = new DESCryptoServiceProvider();
-            byte[] inputByteArray = new byte[strCipher.Length / 2];
-            for (int x = 0; x < strCipher.Length / 2; x++)
+            byte[] decrypted;
+            using (var des = new DESCryptoServiceProvider())
             {
-                int i = (Convert.ToInt32(strCipher.Substring(x * 2, 2), 16));
-                inputByteArray[x] = (byte)i;
+                des.Key = key;
+                des.IV = iv;
+                des.Padding = _paddingMode;
+                des.KeySize = _keySize;
+
+                // Convert to bytes
+                //byte[] textBytes = Convert.FromBase64String(strCipher);
+                byte[] textBytes = new byte[strCipher.Length / 2];
+                for (int x = 0; x < strCipher.Length / 2; x++)
+                {
+                    int i = (Convert.ToInt32(strCipher.Substring(x * 2, 2), 16));
+                    textBytes[x] = (byte)i;
+                }
+
+                using (var ms = new MemoryStream())
+                using (var decryptor = des.CreateDecryptor())
+                {
+                    using (var cryptoStream = new CryptoStream(ms, decryptor,
+                        CryptoStreamMode.Write))
+                    {
+
+                        cryptoStream.Write(textBytes, 0,
+                            textBytes.Length);
+                    }
+                    return System.Text.Encoding.Default.GetString(ms.ToArray());
+                }
+               
             }
-            des.Key = ASCIIEncoding.Default.GetBytes(strKey);
-            des.IV = ASCIIEncoding.Default.GetBytes(strIV);
-            MemoryStream ms = new MemoryStream();
-            CryptoStream cs = new CryptoStream(ms, des.CreateDecryptor(), CryptoStreamMode.Write);
-            cs.Write(inputByteArray, 0, inputByteArray.Length);
-            cs.FlushFinalBlock();
-            StringBuilder ret = new StringBuilder();
-            return System.Text.Encoding.Default.GetString(ms.ToArray());
+           
+            //return Encoding.UTF8.GetString(decrypted);                                
+
         }
 
 

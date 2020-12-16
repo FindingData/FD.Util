@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Security.Cryptography;
+using System.Text;
 using FD.Util.Crypto;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -8,22 +9,17 @@ namespace FD.Util.Test
     [TestClass]
     public class DesTest
     {
-        [TestMethod]
-        public void EncryptKeyTest()
-        {
-            var key1 = DESHelper.GetDesKey();
-            var key2 = DESHelper.GetDesKey();
-            Assert.AreNotEqual(key1, key2);
-        }
-
+       
         [TestMethod]
         public void EncryptTest()
         {
-            var key = "@fddata@";
-            
-            var cipher = DESHelper.Encrypt("cszfp.com", key);
+            //var key = CryptoHelper.GenerateKey("fd@123.com", 8);
 
-            var clear = DESHelper.Decrypt(cipher, key);
+            var strKey = "@fddata@";
+
+            var cipher = DESHelper.Encrypt("cszfp.com", strKey);
+
+            var clear = DESHelper.Decrypt(cipher, strKey);
 
             Assert.AreEqual("cszfp.com", clear);
             
@@ -32,29 +28,24 @@ namespace FD.Util.Test
         [TestMethod]
         public void EncrytpTest2()
         {
-            var des = DESHelper.GetDesKey();
+            var key = CryptoHelper.GenerateKey("fd@123.com", 8);
+            var iv = CryptoHelper.GenerateIv(8);
 
-            var cipher = DESHelper.Encrypt("cszfp.com", des.Key,des.IV);
 
-            var clear = DESHelper.Decrypt(cipher, des.Key, des.IV);
+            var cipher = DESHelper.Encrypt("cszfp.com", key,iv);
+
+            var clear = DESHelper.Decrypt(cipher, key,iv);
 
             Assert.AreEqual("cszfp.com", clear);
 
         }
 
-        [TestMethod]
-        public void Encrypt3DesKeyTest()
-        {
-            var key1 = DESHelper.Get3DesKey();
-            var key2 = DESHelper.Get3DesKey();
-            Assert.AreNotEqual(key1, key2);
-        }
-
+       
 
         [TestMethod]
         public void Encrypt3DesTest()
         {
-            var key = "1234567890@data@"; //128 bits,16 bytes
+            var key = "1234567890@data@";  
 
             var cipher = DESHelper.Encrypt3Des("cszfp.com", key, CipherMode.ECB);
             var clear = DESHelper.Decrypt3Des(cipher, key, CipherMode.ECB);
@@ -64,7 +55,7 @@ namespace FD.Util.Test
         [TestMethod]
         public void Encrypt3DesTest2()
         {
-            var key = "1234567890@data@"; //192 bits,16 bytes
+            var key = "1234567890@data@"; 
 
             var cipher = DESHelper.Encrypt3Des("cszfp.com", key, CipherMode.CBC);
             var clear = DESHelper.Decrypt3Des(cipher, key, CipherMode.CBC);
@@ -74,13 +65,13 @@ namespace FD.Util.Test
         [TestMethod]
         public void Encrytp3DesTest3()
         {
-            var des = DESHelper.Get3DesKey();
+            //var des = DESHelper.Get3DesKey();
 
-            var cipher = DESHelper.Encrypt3Des("cszfp.com", des.Key, des.IV, CipherMode.CBC);
+            //var cipher = DESHelper.Encrypt3Des("cszfp.com", des.Key, des.IV, CipherMode.CBC);
 
-            var clear = DESHelper.Decrypt3Des(cipher, des.Key, des.IV, CipherMode.CBC);
+            //var clear = DESHelper.Decrypt3Des(cipher, des.Key, des.IV, CipherMode.CBC);
 
-            Assert.AreEqual("cszfp.com", clear);
+            //Assert.AreEqual("cszfp.com", clear);
 
         }
     }
