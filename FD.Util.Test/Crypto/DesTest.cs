@@ -13,7 +13,7 @@ namespace FD.Util.Test
         [TestMethod]
         public void EncryptTest()
         {
-            var key = CryptoHelper.GenerateKey("fd@123.com", 8);
+            var key = CryptoHelper.GenerateKey("fd@123.com", 8);          
 
             var strKey = Convert.ToBase64String(key);           
 
