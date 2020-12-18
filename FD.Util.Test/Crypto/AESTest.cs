@@ -13,9 +13,7 @@ namespace FD.Util.Test.Crypto
         [TestMethod]
         public void EncryptTest()
         {
-            var key = CryptoHelper.GenerateKey("fd@123.com", 16);
-            //var key = "1234567890@data@12345678"; // 192/24
-            //var key = "1234567890@data@1234567890@data@"; // 256/32
+            var key = CryptoHelper.GenerateKey("fd@123.com", 16);           
             var strKey = Encoding.UTF8.GetString(key);
             var cipher = AESHelper.Encrypt("cszfp.com", strKey);
 

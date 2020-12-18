@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace FD.Util.Crypto
 {
-    public class TripleDesHelper
+    public static class TripleDesHelper
     {
         /// <summary>
         /// Secret key size in bits.
         /// </summary>
-        private const int _keySize = 128;
+        private const int _keySize = 64;
 
         /// <summary>
         /// Initialization Vector length in bytes.
@@ -36,10 +36,17 @@ namespace FD.Util.Crypto
         /// <param name="strKey"></param>
         /// <param name="mode"></param>
         /// <returns></returns>
-        //public static string Encrypt(string strPlain, string strKey, CipherMode mode)
-        //{
-        //    return Encrypt3Des(strPlain, strKey, strKey.Substring(0, 8), mode);
-        //}
+        public static string Encrypt(string strPlain, string strKey, CipherMode mode = CipherMode.ECB)
+        {
+            var iv = CryptoHelper.GenerateIv(8);
+
+            var cipher = Encrypt(strPlain, Convert.FromBase64String(strKey), iv);
+
+            var encrypted = CryptoHelper.CombineIvData(iv, Convert.FromBase64String(cipher), _ivLength);
+
+            return Convert.ToBase64String(encrypted);
+
+        }
 
         /// <summary>
         /// 3des 解密
@@ -47,10 +54,14 @@ namespace FD.Util.Crypto
         /// <param name="pToDecrypt"></param>
         /// <param name="sKey"></param>
         /// <returns></returns>
-        //public static string Decrypt(string strCipher, string strKey, CipherMode mode)
-        //{
-        //    return Decrypt3Des(strCipher, strKey, strKey.Substring(0, 8), mode);
-        //}
+        public static string Decrypt(string strCipher, string strKey, CipherMode mode = CipherMode.ECB)
+        {
+            var iv = CryptoHelper.GetIv(Convert.FromBase64String(strCipher), _ivLength);
+
+            var encrypted = CryptoHelper.RemoveIv(Convert.FromBase64String(strCipher), _ivLength);
+
+            return Decrypt(Convert.ToBase64String(encrypted), Convert.FromBase64String(strKey), iv, mode);
+        }
 
 
         /// <summary>
@@ -68,11 +79,13 @@ namespace FD.Util.Crypto
             using (var des = new TripleDESCryptoServiceProvider())
             {
                 des.Key = key;
-                if (mode == CipherMode.CBC) {
+                des.Mode = mode;
+
+                if (mode == CipherMode.CBC)
+                {
                     des.IV = iv;
                 }
 
-                des.KeySize = _keySize;
                 des.Padding = _paddingMode;
                 // Convert to bytes
                 byte[] textBytes = Encoding.UTF8.GetBytes(strPlain);
@@ -109,15 +122,14 @@ namespace FD.Util.Crypto
             using (var des = new TripleDESCryptoServiceProvider())
             {
                 des.Key = key;
+                des.Mode = mode;
 
                 if (mode == CipherMode.CBC)
                 {
                     des.IV = iv;
                 }
-
-
-
-                des.KeySize = _keySize;
+                
+                             
                 des.Padding = _paddingMode;
                 // Convert to bytes
                 byte[] textBytes = Convert.FromBase64String(strCipher);

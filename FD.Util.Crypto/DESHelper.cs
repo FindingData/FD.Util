@@ -37,9 +37,9 @@ namespace FD.Util.Crypto
         /// <param name="strKey"></param>
         /// <returns></returns>
         public static string Encrypt(string strPlain,string strKey)
-        {
+        {             
             var iv = CryptoHelper.GenerateIv(8);
-
+            
             var cipher = Encrypt(strPlain, Convert.FromBase64String(strKey), iv);
 
             var encrypted = CryptoHelper.CombineIvData(iv, Convert.FromBase64String(cipher), _ivLength);
