@@ -10,6 +10,62 @@ namespace FD.Util.Crypto
     public static class CryptoHelper
     {
 
+        public static string GenerateRsaPublicKey(string containerName)
+        {
+            // Create the CspParameters object and set the key container
+            // name used to store the RSA key pair.
+            var parameters = new CspParameters
+            {
+                KeyContainerName = containerName
+            };
+
+            // Create a new instance of RSACryptoServiceProvider that accesses
+            // the key container MyKeyContainerName.
+            using (var rsa = new RSACryptoServiceProvider(parameters))
+            {
+                return rsa.ToXmlString(false);
+            }             
+        }
+
+        public static string GenerateRsaPrivateKey(string containerName)
+        {
+            // Create the CspParameters object and set the key container
+            // name used to store the RSA key pair.
+            var parameters = new CspParameters
+            {
+                KeyContainerName = containerName
+            };
+
+            // Create a new instance of RSACryptoServiceProvider that accesses
+            // the key container MyKeyContainerName.
+            using (var rsa = new RSACryptoServiceProvider(parameters))
+            {
+                return rsa.ToXmlString(true);
+            }
+        }
+
+        public static void DeleteRsaKey(string containerName)
+        {
+            // Create the CspParameters object and set the key container
+            // name used to store the RSA key pair.
+            var parameters = new CspParameters
+            {
+                KeyContainerName = containerName
+            };
+
+            // Create a new instance of RSACryptoServiceProvider that accesses
+            // the key container.
+            using (var rsa = new RSACryptoServiceProvider(parameters))
+            {
+                // Delete the key entry in the container.
+                rsa.PersistKeyInCsp = false;
+                // Call Clear to release resources and delete the key from the container.
+                rsa.Clear();
+            };         
+        }
+
+
+
         /// <summary>
         /// Generates encryption key using passphrase.
         /// </summary>
@@ -49,7 +105,7 @@ namespace FD.Util.Crypto
         /// <param name="length"></param>
         /// <returns>IV byte array.</returns>
         public static  byte[] GetIv(byte[] ivdata,int length)
-        {
+        {            
             byte[] iv = new byte[length];
             Array.Copy(sourceArray: ivdata, sourceIndex: 0,
                 destinationArray: iv, destinationIndex: 0,

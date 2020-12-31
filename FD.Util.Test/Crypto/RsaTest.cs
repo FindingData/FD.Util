@@ -11,27 +11,21 @@ namespace FD.Util.Test
         [TestMethod]
         public void EncryptTest()
         {
-            var rsa = new RSACryptoServiceProvider();
+            var publicKey = CryptoHelper.GenerateRsaPublicKey("fd@123.com");
+            var privateKey = CryptoHelper.GenerateRsaPrivateKey("fd@123.com");
 
-
-            var pubK = rsa.ToXmlString(false);
-
-            var priK = rsa.ToXmlString(true);
-
-            var cipher = RSAHelper.Encrypt("cszfp.com", pubK);
-
-            var clear = RSAHelper.Decrypt(cipher, priK);
-
+            var cipher = RSAHelper.Encrypt("cszfp.com", publicKey);
+            var clear = RSAHelper.Decrypt(cipher, privateKey);
+            
             Assert.AreEqual("cszfp.com", clear);
-
         }
 
-        [TestMethod]
-        public void ExportPublicKeyTest()
+        [TestCleanup]
+        public void ClearTest()
         {
-            
-            
-
+            CryptoHelper.DeleteRsaKey("fd@123.com");
         }
+
+        
     }
 }

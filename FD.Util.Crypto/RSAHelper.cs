@@ -15,6 +15,11 @@ namespace FD.Util.Crypto
     /// </summary>
     public static class RSAHelper
     {
+        /// <summary>
+        /// RSA的容器 可以解密的源字符串长度为 DWKEYSIZE/8-11 
+        /// </summary>
+        public const int DWKEYSIZE = 1024;
+
 
         /// <summary>
         /// 字符串加密
@@ -23,22 +28,19 @@ namespace FD.Util.Crypto
         /// <param name="publicKey">公匙或私匙</param>
         /// <returns>加密遇到错误将会返回原字符串</returns>
         public static string Encrypt(string strPlain, string publicKey)
-        {            
-            try
-            {
+        {
+
+            using (var rsa = new RSACryptoServiceProvider(DWKEYSIZE))
+            {                   
+                byte[] textBytes = Encoding.UTF8.GetBytes(strPlain);
+                rsa.FromXmlString(publicKey);
                 
-                using (var rsa = new RSACryptoServiceProvider())
-                {
-                    byte[] textBytes = Encoding.UTF8.GetBytes(strPlain);
-                    rsa.FromXmlString(publicKey);
-                    byte[] encrypted = rsa.Decrypt(textBytes, false);
-                    return Convert.ToBase64String(encrypted);
-                }                                                            
+                byte[] encrypted = rsa.Encrypt(textBytes, false);
+                return Convert.ToBase64String(encrypted);
             }
-            catch {
-                return null;
-            }           
+
         }
+
 
         /// <summary>
         /// 字符串解密
@@ -47,22 +49,15 @@ namespace FD.Util.Crypto
         /// <param name="privateKey">私钥</param>
         /// <returns>遇到解密失败将会返回原字符串</returns>
         public static string Decrypt(string strCipher, string privateKey)
-        {             
-            try
+        {
+            using (var rsa = new RSACryptoServiceProvider(DWKEYSIZE))
             {
                 byte[] textBytes = Convert.FromBase64String(strCipher);
-                RSACryptoServiceProvider.UseMachineKeyStore = true;
-                RSACryptoServiceProvider rsaProvider = new RSACryptoServiceProvider();
-                rsaProvider.FromXmlString(privateKey);
-                byte[] decrypted = rsaProvider.Decrypt(textBytes, false);
+                rsa.FromXmlString(privateKey);
+                byte[] decrypted = rsa.Decrypt(textBytes, false);
                 return Encoding.UTF8.GetString(decrypted);
             }
-            catch
-            {              
-                return null;
-            }
-         
-        }
 
+        }
     }
 }
