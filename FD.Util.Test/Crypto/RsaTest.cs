@@ -20,6 +20,14 @@ namespace FD.Util.Test
             Assert.AreEqual("cszfp.com", clear);
         }
 
+
+        [TestMethod]
+        public void EncryptTest2()
+        {
+
+        }
+
+
         [TestCleanup]
         public void ClearTest()
         {
