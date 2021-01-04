@@ -31,7 +31,7 @@ namespace FD.Util.Crypto
         {
 
             using (var rsa = new RSACryptoServiceProvider(DWKEYSIZE))
-            {                   
+            {                                   
                 byte[] textBytes = Encoding.UTF8.GetBytes(strPlain);
                 rsa.FromXmlString(publicKey);
                 

@@ -46,6 +46,7 @@ namespace FD.Util.Crypto
 
         public static void DeleteRsaKey(string containerName)
         {
+            
             // Create the CspParameters object and set the key container
             // name used to store the RSA key pair.
             var parameters = new CspParameters
