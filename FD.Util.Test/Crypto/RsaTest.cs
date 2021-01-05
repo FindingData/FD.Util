@@ -13,13 +13,38 @@ namespace FD.Util.Test
         [TestMethod]
         public void EncryptTest()
         {
-            var publicKey = CryptoHelper.GenerateRsaPublicKey("fd@123.com");
-            var privateKey = CryptoHelper.GenerateRsaPrivateKey("fd@123.com");
-
+            var publicKey = @"<RSAKeyValue><Modulus>4cedf65bJcLZen/qnNUn1WXwzCJGp8x1nnKaBiBmYmNxCB6aIDwToqWLFonL/4FHMDItItw3PVkMWK3hMJ+5TZpB36H56iW06EYRtba4rviKb5KF/i+fbREqE4rADxBZIb/d1hP29ciA7D/JP6Cd6FreHWa42HaHXfeqsEHsjAE=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue>";
+            var privateKey = @"<RSAKeyValue><Modulus>4cedf65bJcLZen/qnNUn1WXwzCJGp8x1nnKaBiBmYmNxCB6aIDwToqWLFonL/4FHMDItItw3PVkMWK3hMJ+5TZpB36H56iW06EYRtba4rviKb5KF/i+fbREqE4rADxBZIb/d1hP29ciA7D/JP6Cd6FreHWa42HaHXfeqsEHsjAE=</Modulus><Exponent>AQAB</Exponent><P>6aG9bMiBbgflnj9Rleng7vBQQPuWuuR7ETMw9XQnL1WLxEeZs8zn36Ph+ziSg6TDvOhBHlLC49lmHdvha0vJpw==</P><Q>92VsZInwwVfUVL/oyS87Ya4PR0FBRI9pZJyR6C4TTf7vTMCBC2XDV6uRC+m9RU/JypEuOsp8+WLgBVHlrCjiFw==</Q><DP>HvjCE9nAzsVdO01Jk4Ydu49AFF1F7iC779vJccCkMTI2BR840Q0o8AzZuGQXiDwfdruTZmGyVGJNl0e+6mpxoQ==</DP><DQ>R5wqBegPskdUBLwQC7wKOjoB3iQ7WjcQ0LipW0WK/PagGd1W/Q+VvZjBwWsFCD0SMfpYIVhfWGiQY7nS+0RSPQ==</DQ><InverseQ>MC5PTTSaiCRRGerW9CpWq6k+b1pBT5q3QO0TonmqPVoJ5dyprVgeHmLUPkmefKcqLQh8+5Bdw15fjJfI9g8iBg==</InverseQ><D>MOcemxA119j7aAga1ftpVFRvMpfd++xSMY6bA+aypm7phZuzQHYivqDinnAcSmxC8hJ8KkfOgzAtd2u6EeEWrmshZ04ZZ+doDc+aejLBcm+CtvqzW10loMIdbsoAYxGw+TV3P8sddRU7xQjbR6nLmcudzAFQiV3yoOe6Ynp7Wo0=</D></RSAKeyValue>";
+             
             var cipher = RSAHelper.Encrypt("cszfp.com", publicKey);
             var clear = RSAHelper.Decrypt(cipher, privateKey);
             
             Assert.AreEqual("cszfp.com", clear);
+        }
+
+
+        [TestMethod]
+        public void EncryptTest4()
+        {
+            var xmlKey = @"<RSAKeyValue><Modulus>4cedf65bJcLZen/qnNUn1WXwzCJGp8x1nnKaBiBmYmNxCB6aIDwToqWLFonL/4FHMDItItw3PVkMWK3hMJ+5TZpB36H56iW06EYRtba4rviKb5KF/i+fbREqE4rADxBZIb/d1hP29ciA7D/JP6Cd6FreHWa42HaHXfeqsEHsjAE=</Modulus><Exponent>AQAB</Exponent><P>6aG9bMiBbgflnj9Rleng7vBQQPuWuuR7ETMw9XQnL1WLxEeZs8zn36Ph+ziSg6TDvOhBHlLC49lmHdvha0vJpw==</P><Q>92VsZInwwVfUVL/oyS87Ya4PR0FBRI9pZJyR6C4TTf7vTMCBC2XDV6uRC+m9RU/JypEuOsp8+WLgBVHlrCjiFw==</Q><DP>HvjCE9nAzsVdO01Jk4Ydu49AFF1F7iC779vJccCkMTI2BR840Q0o8AzZuGQXiDwfdruTZmGyVGJNl0e+6mpxoQ==</DP><DQ>R5wqBegPskdUBLwQC7wKOjoB3iQ7WjcQ0LipW0WK/PagGd1W/Q+VvZjBwWsFCD0SMfpYIVhfWGiQY7nS+0RSPQ==</DQ><InverseQ>MC5PTTSaiCRRGerW9CpWq6k+b1pBT5q3QO0TonmqPVoJ5dyprVgeHmLUPkmefKcqLQh8+5Bdw15fjJfI9g8iBg==</InverseQ><D>MOcemxA119j7aAga1ftpVFRvMpfd++xSMY6bA+aypm7phZuzQHYivqDinnAcSmxC8hJ8KkfOgzAtd2u6EeEWrmshZ04ZZ+doDc+aejLBcm+CtvqzW10loMIdbsoAYxGw+TV3P8sddRU7xQjbR6nLmcudzAFQiV3yoOe6Ynp7Wo0=</D></RSAKeyValue>";
+            var toPemKey = CryptoHelper.ToBase64XmlFromPem(xmlKey);
+            var pemKey = @"-----BEGIN RSA PRIVATE KEY-----
+MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBAOHHnX+uWyXC2Xp/
+6pzVJ9Vl8MwiRqfMdZ5ymgYgZmJjcQgemiA8E6KlixaJy/+BRzAyLSLcNz1ZDFit
+4TCfuU2aQd+h+eoltOhGEbW2uK74im+Shf4vn20RKhOKwA8QWSG/3dYT9vXIgOw/
+yT+gneha3h1muNh2h133qrBB7IwBAgMBAAECgYAw5x6bEDXX2PtoCBrV+2lUVG8y
+l9377FIxjpsD5rKmbumFm7NAdiK+oOKecBxKbELyEnwqR86DMC13a7oR4RauayFn
+Thln52gNz5p6MsFyb4K2+rNbXSWgwh1uygBjEbD5NXc/yx11FTvFCNtHqcuZy53M
+AVCJXfKg57pientajQJBAOmhvWzIgW4H5Z4/UZXp4O7wUED7lrrkexEzMPV0Jy9V
+i8RHmbPM59+j4fs4koOkw7zoQR5SwuPZZh3b4WtLyacCQQD3ZWxkifDBV9RUv+jJ
+Lzthrg9HQUFEj2lknJHoLhNN/u9MwIELZcNXq5EL6b1FT8nKkS46ynz5YuAFUeWs
+KOIXAkAe+MIT2cDOxV07TUmThh27j0AUXUXuILvv28lxwKQxMjYFHzjRDSjwDNm4
+ZBeIPB92u5NmYbJUYk2XR77qanGhAkBHnCoF6A+yR1QEvBALvAo6OgHeJDtaNxDQ
+uKlbRYr89qAZ3Vb9D5W9mMHBawUIPRIx+lghWF9YaJBjudL7RFI9AkAwLk9NNJqI
+JFEZ6tb0KlarqT5vWkFPmrdA7ROieao9Wgnl3KmtWB4eYtQ+SZ58pyotCHz7kF3D
+Xl+Ml8j2DyIG
+-----END RSA PRIVATE KEY-----";
+            Assert.AreEqual(toPemKey, pemKey);
         }
 
 
@@ -119,11 +144,7 @@ BckdRUEErSVp3czJ6OD08L01vZHVsdXM+PEV4cG9uZW50PkFRQUI8L0V4cG9uZW50PjwvUlNBS2V5VmF
         }
 
 
-        [TestCleanup]
-        public void ClearTest()
-        {
-            CryptoHelper.DeleteRsaKey("fd@123.com");
-        }
+       
 
         
     }

@@ -18,7 +18,7 @@ namespace FD.Util.Crypto
         /// <summary>
         /// RSA的容器 可以解密的源字符串长度为 DWKEYSIZE/8-11 
         /// </summary>
-        public const int DWKEYSIZE = 1024;
+        public const int DWKEYSIZE = 2048;
 
 
         /// <summary>
