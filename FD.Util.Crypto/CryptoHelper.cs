@@ -74,64 +74,89 @@ namespace FD.Util.Crypto
         //    };         
         //}
 
-        public static string ToBase64PemFromXML(string xml)
+   
+        /// <summary>
+        /// convert pem public key to RSA private xml 
+        /// </summary>
+        /// <param name="publicPem"></param>
+        /// <returns></returns>
+        public static string PublicPemToXml(string publicPem)
+        {
+            using (var sr = new StringReader(publicPem))
+            {
+                var pr = new PemReader(sr);
+                var publicKey = (RsaKeyParameters)pr.ReadObject();                
+                using (RSA rsa = DotNetUtilities.ToRSA(publicKey))
+                {
+                    return rsa.ToXmlString(false);
+                }
+            }                                 
+        }
+
+        /// <summary>
+        /// onvert pem private key to RSA private xml 
+        /// </summary>
+        /// <param name="privatePem"></param>
+        /// <returns></returns>
+        public static string PrivatePemToXml(string privatePem)
+        {
+            using (var sr = new StringReader(privatePem))
+            {
+                var pr = new PemReader(sr);                
+                var keyPair = (RsaPrivateCrtKeyParameters)pr.ReadObject();      
+                
+                using (RSA rsa = DotNetUtilities.ToRSA(keyPair))
+                {
+                    return rsa.ToXmlString(true);
+                }
+            }
+        }
+
+        /// <summary>
+        /// onvert RSA xml public key to pem public xml 
+        /// </summary>
+        /// <param name="privatePem"></param>
+        /// <returns></returns>
+        public static string PublicXmlToPem(string publicXml)
+        {
+            using (RSA rsa= RSA.Create())
+            {               
+                rsa.FromXmlString(publicXml);
+                var publicKey = DotNetUtilities.GetRsaPublicKey(rsa);
+                var publicKeyInfo = SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(publicKey);
+                var base64 = Convert.ToBase64String(publicKeyInfo.GetEncoded());
+                StringBuilder b = new StringBuilder();
+                b.Append("-----BEGIN PUBLIC KEY-----\n");
+                for (int i = 0; i < base64.Length; i += 64)
+                    b.Append($"{ base64.Substring(i, Math.Min(64, base64.Length - i)) }\n");
+                b.Append("-----END PUBLIC KEY-----\n");
+                return b.ToString();
+                           
+            }          
+        }
+
+        /// <summary>
+        /// onvert RSA xml private key to pem private xml 
+        /// </summary>
+        /// <param name="privatePem"></param>
+        /// <returns></returns>
+        public static string PrivateXmlToPem(string privateXml)
         {
             using (RSA rsa = RSA.Create())
-            {
-                rsa.FromXmlString(xml);
-                
-                AsymmetricCipherKeyPair keyPair =  DotNetUtilities.GetRsaKeyPair(rsa); // try get private and public key pair
-                if (keyPair != null) // if XML RSA key contains private key
-                {
-                    PrivateKeyInfo privateKeyInfo = PrivateKeyInfoFactory.CreatePrivateKeyInfo(keyPair.Private);
-                    return FormatPem(Convert.ToBase64String(privateKeyInfo.GetEncoded()), "PRIVATE KEY");
-
-                }
-
-                RsaKeyParameters publicKey = Org.BouncyCastle.Security.DotNetUtilities.GetRsaPublicKey(rsa); // try get public key
-                if (publicKey != null) // if XML RSA key contains public key
-                {
-                    SubjectPublicKeyInfo publicKeyInfo = SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(publicKey);
-                    return FormatPem(Convert.ToBase64String(publicKeyInfo.GetEncoded()), "PUBLIC KEY");
-                }
+            {             
+                rsa.FromXmlString(privateXml);
+                var keyPair = DotNetUtilities.GetRsaKeyPair(rsa);
+                PrivateKeyInfo privateKeyInfo = PrivateKeyInfoFactory.CreatePrivateKeyInfo(keyPair.Private);
+                var base64 = Convert.ToBase64String(privateKeyInfo.GetEncoded());
+                StringBuilder b = new StringBuilder();
+                b.Append("-----BEGIN PRIVATE KEY-----\n");
+                for (int i = 0; i < base64.Length; i += 64)
+                    b.Append($"{ base64.Substring(i, Math.Min(64, base64.Length - i)) }\n");
+                b.Append("-----END PRIVATE KEY-----\n");
+                return b.ToString();
             }
-            return "";
         }
-
-
-        private static string FormatPem(string pem, string keyType)
-        {
-            var sb = new StringBuilder();
-            sb.AppendFormat("-----BEGIN {0}-----\n", keyType);
-
-            int line = 1, width = 64;
-
-            while ((line - 1) * width < pem.Length)
-            {
-                int startIndex = (line - 1) * width;
-                int len = line * width > pem.Length
-                              ? pem.Length - startIndex
-                              : width;
-                sb.AppendFormat("{0}\n", pem.Substring(startIndex, len));
-                line++;
-            }
-
-            sb.AppendFormat("-----END {0}-----\n", keyType);
-            return sb.ToString();
-        }
-
-        public static string ToBase64XmlFromPem(string pem)
-        {
-            PemReader pr = new PemReader(new StringReader(pem));
-            AsymmetricCipherKeyPair KeyPair = (AsymmetricCipherKeyPair)pr.ReadObject();
-            
-            RSAParameters rsaParams = DotNetUtilities.ToRSAParameters((RsaPrivateCrtKeyParameters)KeyPair.Private);
-            RSACryptoServiceProvider csp = new RSACryptoServiceProvider();// cspParams);
-            csp.ImportParameters(rsaParams);
-            return Convert.ToBase64String(Encoding.ASCII.GetBytes(csp.ToXmlString(true)));
-        }
-
-
+ 
 
         //public static void ExportPrivateKey(RSACryptoServiceProvider csp, TextWriter outputStream)
         //{
@@ -228,7 +253,7 @@ namespace FD.Util.Crypto
         //    }
         //}
 
-    
+
 
         /// <summary>
         /// Generates encryption key using passphrase.

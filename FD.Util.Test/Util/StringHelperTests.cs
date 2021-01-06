@@ -11,6 +11,19 @@ namespace FD.Util.Tests
     [TestClass()]
     public class StringHelperTests
     {
+
+        [TestMethod]
+        public void VerbatimStringTest()
+        {
+            var str1 = @"a
+b
+c";
+            var str2 = "a\r\nb\r\nc";
+           
+            Assert.AreEqual(str1, str2);
+        }
+
+
         [TestMethod()]
         public void GetNumTest()
         {
