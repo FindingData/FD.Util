@@ -46,7 +46,7 @@
   <ItemGroup>
     <Compile Include="AESHelper.cs" />
     <Compile Include="DESHelper.cs" />
-    <Compile Include="HashingCompute.cs" />
+    <Compile Include="HashHelper.cs" />
     <Compile Include="CryptoHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RSAHelper.cs" />

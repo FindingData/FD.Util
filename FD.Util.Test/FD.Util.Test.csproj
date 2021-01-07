@@ -46,6 +46,7 @@
     <Compile Include="Crypto\DesTest.cs" />
     <Compile Include="Crypto\RsaTest.cs" />
     <Compile Include="Crypto\AESTest.cs" />
+    <Compile Include="Crypto\HashTest.cs" />
     <Compile Include="Util\StringHelperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -67,7 +68,11 @@
       <Name>FD.Util</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Resources\Md5File.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

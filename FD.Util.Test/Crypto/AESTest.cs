@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Text;
 
-namespace FD.Util.Test.Crypto
+namespace FD.Util.Test
 {
     [TestClass]
     public class AESTest

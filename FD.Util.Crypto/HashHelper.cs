@@ -7,17 +7,48 @@ using System.IO;
 
 namespace FD.Util.Crypto
 {
-    public class HashingCompute
+    public class HashHelper
     {
+
         /// <summary>
-        /// Checks the md5sum.        
+        /// MD5字符串+盐
         /// </summary>
-        /// <remarks>
-        /// 参考淘宝sdk中AtsUtils,CheckMd5sum
-        /// </remarks>
-        /// <param name="bytes">The bytes.</param>
+        /// <param name="plain">字符串</param>
+        /// <param name="salt">盐</param>
         /// <returns></returns>
-        public static string CalMd5(byte[] bytes)
+        public static string Md5WithSalt(string plain,byte[] salt)
+        {
+            return Md5(Encoding.UTF8.GetBytes(plain).Concat(salt).ToArray());
+        }
+
+        /// <summary>
+        /// MD5字符串+盐
+        /// </summary>
+        /// <param name="plain">字符串</param>
+        /// <param name="salt">盐</param>
+        /// <returns></returns>
+        public static string Md5WithSalt(byte[] plain, byte[] salt)
+        {
+            return Md5(plain.Concat(salt).ToArray());
+        }
+
+
+        /// <summary>
+        /// MD5字符串
+        /// </summary>
+        /// <param name="plain">字符串</param>
+        /// <returns></returns>
+        public static string Md5(string plain)
+        {
+            return Md5(Encoding.UTF8.GetBytes(plain));
+        }
+
+        /// <summary>
+        /// MD5字节
+        /// </summary>
+        /// <param name="bytes">字节数组</param>
+        /// <returns></returns>
+        public static string Md5(byte[] bytes)
         {
             using (MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider())
             {
@@ -27,20 +58,20 @@ namespace FD.Util.Crypto
                 {
                     sb.Append(retVal[i].ToString("x2"));
                 }
-                return sb.ToString().ToLowerInvariant();
+                return sb.ToString();
             }
         }
 
         /// <summary>
-        /// Checks the md5sum.        
+        /// MD5文件
         /// </summary>       
-        /// <param name="bytes">The bytes.</param>
+        /// <param name="filePath">文件路径</param>
         /// <returns></returns>
-        public static string CalMd5File(string strFilePath)
+        public static string Md5File(string filePath)
         {
             using (MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider())
             {
-                using (FileStream fs = new FileStream(strFilePath, FileMode.Open, FileAccess.Read))
+                using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
                 {
                     byte[] retVal = md5.ComputeHash(fs);
                     StringBuilder sb = new StringBuilder();
@@ -48,33 +79,11 @@ namespace FD.Util.Crypto
                     {
                         sb.Append(retVal[i].ToString("x2"));
                     }
-                    return sb.ToString().ToLowerInvariant();
+                    return sb.ToString();
                 }
             }
         }
-
-        /// <summary>
-        /// MD5字符串加密
-        /// </summary>
-        /// <param name="txt"></param>
-        /// <returns>加密后字符串</returns>
-        public static string CalMd5(string txt)
-        {
-            using (MD5 mi = MD5.Create())
-            {
-                byte[] buffer = Encoding.Default.GetBytes(txt);
-                //开始加密
-                byte[] newBuffer = mi.ComputeHash(buffer);
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < newBuffer.Length; i++)
-                {
-                    sb.Append(newBuffer[i].ToString("x2"));
-                }
-                return sb.ToString();
-            }
-        }
-
-
+     
         /// <summary>
         /// Cals the sha1.
         /// </summary>
@@ -93,8 +102,7 @@ namespace FD.Util.Crypto
                 }
                 return sb.ToString().ToLowerInvariant();
             }
-        }
-        
+        }        
     }
 
 
