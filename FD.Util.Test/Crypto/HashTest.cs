@@ -41,7 +41,7 @@ namespace FD.Util.Test
         {
             var str = "cszfp.com";
             var salt = "oWsc7Osv4TA=";          
-            var md5 = HashHelper.Sha1WithSalt(str,Encoding.UTF8.GetBytes(salt));
+            var md5 = HashHelper.Md5WithSalt(str,Encoding.UTF8.GetBytes(salt));
             var md5Str = HashHelper.Md5WithSalt(str, Encoding.UTF8.GetBytes(salt));
             Assert.AreEqual(md5Str, md5);
         }

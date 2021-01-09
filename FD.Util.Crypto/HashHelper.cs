@@ -156,12 +156,11 @@ namespace FD.Util.Crypto
                     {
                         sb.Append(retVal[i].ToString("x2"));
                     }
-                    return sb.ToString().ToLowerInvariant();
+                    return sb.ToString();
                 }
             }
         }
         #endregion
-
 
         #region Sha256
         /// <summary>
@@ -201,7 +200,7 @@ namespace FD.Util.Crypto
                 {
                     sb.Append(retVal[i].ToString("x2"));
                 }
-                return sb.ToString().ToLowerInvariant();
+                return sb.ToString();
             }
         }
 
@@ -233,7 +232,7 @@ namespace FD.Util.Crypto
                     {
                         sb.Append(retVal[i].ToString("x2"));
                     }
-                    return sb.ToString().ToLowerInvariant();
+                    return sb.ToString();
                 }
             }
         }
@@ -267,7 +266,7 @@ namespace FD.Util.Crypto
                 {
                     sb.Append(retVal[i].ToString("x2"));
                 }
-                return sb.ToString().ToLowerInvariant();
+                return sb.ToString();
             }
         }
 
@@ -290,7 +289,7 @@ namespace FD.Util.Crypto
                     {
                         sb.Append(retVal[i].ToString("x2"));
                     }
-                    return sb.ToString().ToLowerInvariant();
+                    return sb.ToString();
                 }
             }
         }
