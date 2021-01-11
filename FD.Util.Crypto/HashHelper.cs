@@ -68,7 +68,7 @@ namespace FD.Util.Crypto
         /// <param name="filePath">文件路径</param>
         /// <returns></returns>
         public static string Md5File(string filePath)
-        {
+        {            
             using (MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider())
             {
                 using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
