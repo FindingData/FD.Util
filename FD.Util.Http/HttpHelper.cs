@@ -151,6 +151,12 @@ namespace FD.Util.Http
             return result.Result.Content.ReadAsStringAsync().Result;
         }
 
+        public byte[] GetByte(string requestUrl)
+        {
+            var result = _httpClient.GetByteArrayAsync(requestUrl);
+            return result.Result;
+        }
+
         /// <summary>
         /// 把请求的URL相对路径组合成绝对路径
         /// <para>李玉宝于2016-07-21 9:54:07</para>
