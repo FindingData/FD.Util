@@ -44,5 +44,11 @@
     <Compile Include="HttpHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FD.Util.Json\FD.Util.Json.csproj">
+      <Project>{D95F5DCD-8FF1-4B3E-B68D-41EAF7AE506D}</Project>
+      <Name>FD.Util.Json</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
