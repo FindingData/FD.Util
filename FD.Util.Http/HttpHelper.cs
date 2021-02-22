@@ -77,6 +77,22 @@ namespace FD.Util.Http
             return JsonHelper.Instance.Deserialize<T>(jsonString);
         }
 
+
+        public byte[] GetByte(Dictionary<string, string> parameters, string requestUri)
+        {
+            if (parameters != null)
+            {
+                var strParam = string.Join("&", parameters.Select(o => o.Key + "=" + o.Value));
+                requestUri = string.Concat(ConcatURL(requestUri), '?', strParam);
+            }
+            else
+            {
+                requestUri = ConcatURL(requestUri);
+            }
+            var result = _httpClient.GetByteArrayAsync(requestUri);
+            return result.Result;
+        }
+
         /// <summary>
         /// 以json的方式Post数据 返回string类型
         /// <para>最终以json的方式放置在http体中</para>
@@ -151,11 +167,7 @@ namespace FD.Util.Http
             return result.Result.Content.ReadAsStringAsync().Result;
         }
 
-        public byte[] GetByte(string requestUrl)
-        {
-            var result = _httpClient.GetByteArrayAsync(requestUrl);
-            return result.Result;
-        }
+       
 
         /// <summary>
         /// 把请求的URL相对路径组合成绝对路径
