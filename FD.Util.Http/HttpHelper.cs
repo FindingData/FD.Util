@@ -77,6 +77,30 @@ namespace FD.Util.Http
             return JsonHelper.Instance.Deserialize<T>(jsonString);
         }
 
+        /// <summary>
+        /// Get请求数据
+        ///   /// <para>最终以url参数的方式提交</para>
+        /// <para>yubaolee 2016-3-3 重构与post同样异步调用</para>
+        /// </summary>
+        /// <param name="parameters">参数字典,可为空</param>
+        /// <param name="requestUri">例如/api/Files/UploadFile</param>
+        /// <returns></returns>
+        public string Delete(Dictionary<string, string> parameters, string requestUri)
+        {
+            if (parameters != null)
+            {
+                var strParam = string.Join("&", parameters.Select(o => o.Key + "=" + o.Value));
+                requestUri = string.Concat(ConcatURL(requestUri), '?', strParam);
+            }
+            else
+            {
+                requestUri = ConcatURL(requestUri);
+            }
+
+            var result = _httpClient.DeleteAsync(requestUri);
+            return result.Result.Content.ReadAsStringAsync().Result;
+        }
+
 
         public byte[] GetByte(Dictionary<string, string> parameters, string requestUri)
         {
@@ -154,11 +178,23 @@ namespace FD.Util.Http
             return Post(requestUri, httpContent);
         }
 
-        public string PostByte(byte[] bytes, string requestUrl)
+        public string UploadFile(string file_name,byte[] bytes, string requestUrl)
         {
+          
+            MultipartFormDataContent form = new MultipartFormDataContent();
+            
             HttpContent content = new ByteArrayContent(bytes);
-            content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-            return Post(requestUrl, content);
+            //content.Headers.ContentType = new MediaTypeHeaderValue("multipart/form-data");
+            //content.Headers.ContentDisposition = new ContentDispositionHeaderValue("multipart/form-data")
+            //{
+            //    FileName = file_name,
+            //    Name = "file",
+            //};
+            //content.Add(new StreamContent(fileStream), "\"file\"", string.Format("\"{0}\"", fileInfo.Name)
+
+           form.Add(content, "\"file\"", string.Format("\"{0}\"", file_name));
+            
+            return Post(requestUrl, form);
         }
 
         private string Post(string requestUrl, HttpContent content)
@@ -167,6 +203,8 @@ namespace FD.Util.Http
             return result.Result.Content.ReadAsStringAsync().Result;
         }
 
+
+       
        
 
         /// <summary>

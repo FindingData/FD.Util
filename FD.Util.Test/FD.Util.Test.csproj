@@ -47,6 +47,7 @@
     <Compile Include="Crypto\RsaTest.cs" />
     <Compile Include="Crypto\AESTest.cs" />
     <Compile Include="Crypto\HashTest.cs" />
+    <Compile Include="Http\HttpTests.cs" />
     <Compile Include="Util\StringHelperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -63,6 +64,10 @@
       <Project>{51efccf8-3ea1-4374-99e9-edf5c3aab81d}</Project>
       <Name>FD.Util.Crypto</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FD.Util.Http\FD.Util.Http.csproj">
+      <Project>{19ca2ccb-7e22-4394-bea2-66be088fd67a}</Project>
+      <Name>FD.Util.Http</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FD.Util\FD.Util.csproj">
       <Project>{5B7F39B3-7FCB-42E1-8942-C92CCFE89DEF}</Project>
       <Name>FD.Util</Name>
@@ -72,7 +77,11 @@
     <Content Include="Resources\Md5File.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\tmp.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
