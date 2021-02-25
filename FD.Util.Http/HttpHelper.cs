@@ -93,7 +93,7 @@ namespace FD.Util.Http
                 requestUri = string.Concat(ConcatURL(requestUri), '?', strParam);
             }
             else
-            {
+            {             
                 requestUri = ConcatURL(requestUri);
             }
 
@@ -178,22 +178,11 @@ namespace FD.Util.Http
             return Post(requestUri, httpContent);
         }
 
-        public string UploadFile(string file_name,byte[] bytes, string requestUrl)
+        public string UploadFile(string file_name, byte[] bytes, string requestUrl)
         {
-          
             MultipartFormDataContent form = new MultipartFormDataContent();
-            
             HttpContent content = new ByteArrayContent(bytes);
-            //content.Headers.ContentType = new MediaTypeHeaderValue("multipart/form-data");
-            //content.Headers.ContentDisposition = new ContentDispositionHeaderValue("multipart/form-data")
-            //{
-            //    FileName = file_name,
-            //    Name = "file",
-            //};
-            //content.Add(new StreamContent(fileStream), "\"file\"", string.Format("\"{0}\"", fileInfo.Name)
-
-           form.Add(content, "\"file\"", string.Format("\"{0}\"", file_name));
-            
+            form.Add(content, "\"file\"", string.Format("\"{0}\"", file_name));
             return Post(requestUrl, form);
         }
 
