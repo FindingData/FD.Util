@@ -13,6 +13,16 @@ namespace FD.Util
             return ToBase64(text, Encoding.UTF8);
         }
 
+        public static byte[] HexStringToHex(this string text)
+        {
+            var resultantArray = new byte[text.Length / 2];
+            for (var i = 0; i < resultantArray.Length; i++)
+            {
+                resultantArray[i] = System.Convert.ToByte(text.Substring(i * 2, 2), 16);
+            }
+            return resultantArray;
+        }
+
         public static string ToBase64(this string text, Encoding encoding)
         {
             if (string.IsNullOrEmpty(text))
