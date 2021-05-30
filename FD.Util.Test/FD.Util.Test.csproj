@@ -48,6 +48,8 @@
     <Compile Include="Crypto\AESTest.cs" />
     <Compile Include="Crypto\HashTest.cs" />
     <Compile Include="Http\HttpTests.cs" />
+    <Compile Include="Network\MacHelperTests.cs" />
+    <Compile Include="Network\IPHelperTests.cs" />
     <Compile Include="Util\StringHelperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -67,6 +69,10 @@
     <ProjectReference Include="..\FD.Util.Http\FD.Util.Http.csproj">
       <Project>{19ca2ccb-7e22-4394-bea2-66be088fd67a}</Project>
       <Name>FD.Util.Http</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FD.Util.Network\FD.Util.Network.csproj">
+      <Project>{A79919F4-A0C3-405F-8A1E-1101D5D23A19}</Project>
+      <Name>FD.Util.Network</Name>
     </ProjectReference>
     <ProjectReference Include="..\FD.Util\FD.Util.csproj">
       <Project>{5B7F39B3-7FCB-42E1-8942-C92CCFE89DEF}</Project>

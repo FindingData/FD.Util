@@ -56,9 +56,18 @@ namespace FD.Util.Http
             {
                 requestUri = ConcatURL(requestUri);
             }
-
+            
             var result = _httpClient.GetStringAsync(requestUri);
             return result.Result;
+        }
+
+        public string Get(Dictionary<string, string> parameters,Dictionary<string,string> headers, string requestUri)
+        {          
+            foreach (var header in headers)
+            {
+                _httpClient.DefaultRequestHeaders.Add(header.Key, header.Value);
+            }
+            return Get(parameters, requestUri);
         }
 
         /// <summary>
@@ -134,13 +143,27 @@ namespace FD.Util.Http
             return Post(requestUri, httpContent);
         }
 
-        /// <summary>
-        /// 提交字典类型的数据
-        /// <para>最终以formurlencode的方式放置在http体中</para>
-        /// <para>李玉宝于2016-07-20 19:01:59</para>
-        /// </summary>
-        /// <returns>System.String.</returns>
-        public string PostDicObj(Dictionary<string, object> para, string requestUri)
+        public string Post(object entity, Dictionary<string, string> headers, string requestUri)
+        {
+            string request = string.Empty;
+            if (entity != null)
+                request = JsonHelper.Instance.Serialize(entity);
+            HttpContent httpContent = new StringContent(request);
+            httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            foreach (var header in headers)
+            {
+                httpContent.Headers.Add(header.Key, header.Value);
+            }
+            return Post(requestUri, httpContent);
+        }
+        
+    /// <summary>
+    /// 提交字典类型的数据
+    /// <para>最终以formurlencode的方式放置在http体中</para>
+    /// <para>李玉宝于2016-07-20 19:01:59</para>
+    /// </summary>
+    /// <returns>System.String.</returns>
+    public string PostDicObj(Dictionary<string, object> para, string requestUri)
         {
             Dictionary<string, string> temp = new Dictionary<string, string>();
             foreach (var item in para)
@@ -193,7 +216,7 @@ namespace FD.Util.Http
         }
 
 
-       
+        
        
 
         /// <summary>
