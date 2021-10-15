@@ -47,6 +47,7 @@
     <Compile Include="Crypto\RsaTest.cs" />
     <Compile Include="Crypto\AESTest.cs" />
     <Compile Include="Crypto\HashTest.cs" />
+    <Compile Include="Crypto\HexMixHelperTests.cs" />
     <Compile Include="Util\StringHelperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

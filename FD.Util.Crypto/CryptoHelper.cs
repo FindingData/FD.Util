@@ -347,5 +347,26 @@ namespace FD.Util.Crypto
             return bytes;
         }
 
+
+
+        /// <summary>
+        /// 生成随机的0-9a-zA-Z字符串
+        /// </summary>
+        /// <returns></returns>
+        public static string GenerateKeys()
+        {
+            string[] Chars = "0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z".Split(',');
+            int SeekSeek = unchecked((int)DateTime.Now.Ticks);
+            Random SeekRand = new Random(SeekSeek);
+            for (int i = 0; i < 100000; i++)
+            {
+                int r = SeekRand.Next(1, Chars.Length);
+                string f = Chars[0];
+                Chars[0] = Chars[r - 1];
+                Chars[r - 1] = f;
+            }
+            return string.Join("", Chars);
+        }
+
     }
 }
