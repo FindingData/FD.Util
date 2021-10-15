@@ -135,6 +135,37 @@ namespace FD.Util.Test
             Assert.AreEqual(Sha256Str, Sha256);
         }
 
+        [TestMethod]
+        public void HmacSha1Test()
+        {
+            var str = "cszfp.com";
+            var salt = "SK1BtAloxIaQUgv9m0gjqrQJ0NJikkPPUTlRGOzp";
+            var HmacSha1 = HashHelper.HmacSha1(Encoding.UTF8.GetBytes(str), Encoding.UTF8.GetBytes(salt));
+
+            var HmacSha1Str = "fc9afbda6e559a1b378dd1b74db7e2251784ed42";
+            Assert.AreEqual(HmacSha1Str, HmacSha1);
+
+            var HmacSha1Base64 = Convert.ToBase64String(HmacSha1.HexStringToHex());
+
+            var HmacSha1Base64Str = "/Jr72m5Vmhs3jdG3TbfiJReE7UI=";
+            
+            Assert.AreEqual(HmacSha1Base64Str, HmacSha1Base64);
+
+        }
+
+       
+
+                [TestMethod]
+        public void HmacSha1StringTest()
+        {
+            var str = "cszfp.com";
+            var salt = "oWsc7Osv4TA=";
+
+            var HmacSha256 = HashHelper.HmacSha1(str, Encoding.UTF8.GetBytes(salt));
+            var HmacSha256Str = "850b40da03da5239e102c076c373b038bd6dd88668688324a4c46ab316f23a3c";
+            Assert.AreEqual(HmacSha256Str, HmacSha256);
+        }
+
 
         [TestMethod]
         public void HmacSha256Test()

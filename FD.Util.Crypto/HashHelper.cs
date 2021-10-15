@@ -238,6 +238,40 @@ namespace FD.Util.Crypto
         }
         #endregion
 
+        #region HMAC sha1
+        /// <summary>
+        /// HmacSha1
+        /// </summary>
+        /// <param name="plain">The plain string</param>
+        /// <returns></returns>
+        public static string HmacSha1(string plain, byte[] key)
+        {
+            return HmacSha1(Encoding.UTF8.GetBytes(plain), key);
+        }
+
+
+        /// <summary>
+        /// HmacSha1
+        /// </summary>
+        /// <param name="bytes">The bytes.</param>
+        /// <param name="key">key</param>
+        /// <returns></returns>
+        public static string HmacSha1(byte[] bytes, byte[] key)
+        {
+            using (HMACSHA1 hmacSha1 = new HMACSHA1(key))
+            {
+                byte[] retVal = hmacSha1.ComputeHash(bytes);
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < retVal.Length; i++)
+                {
+                    sb.Append(retVal[i].ToString("x2"));
+                }
+                return sb.ToString();
+            }
+        }
+
+        #endregion
+
         #region HMAC sha256   
         /// <summary>
         /// HmacSha256
