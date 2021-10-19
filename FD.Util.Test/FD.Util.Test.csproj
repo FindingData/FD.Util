@@ -40,6 +40,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Crypto\TripleDesTest.cs" />
@@ -51,6 +52,7 @@
     <Compile Include="Network\MacHelperTests.cs" />
     <Compile Include="Network\IPHelperTests.cs" />
     <Compile Include="Crypto\HexMixHelperTests.cs" />
+    <Compile Include="QrCode\QrCodeHelperTests.cs" />
     <Compile Include="Util\StringHelperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -74,6 +76,10 @@
     <ProjectReference Include="..\FD.Util.Network\FD.Util.Network.csproj">
       <Project>{A79919F4-A0C3-405F-8A1E-1101D5D23A19}</Project>
       <Name>FD.Util.Network</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FD.Util.QrCode\FD.Util.QrCode.csproj">
+      <Project>{47DE1618-8371-4194-804F-84BC9A5B4711}</Project>
+      <Name>FD.Util.QrCode</Name>
     </ProjectReference>
     <ProjectReference Include="..\FD.Util\FD.Util.csproj">
       <Project>{5B7F39B3-7FCB-42E1-8942-C92CCFE89DEF}</Project>
