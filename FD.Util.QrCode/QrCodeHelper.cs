@@ -32,7 +32,7 @@ namespace FD.Util.QrCode
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        private Image ConvertStringToImage(string text)
+        public Image ConvertStringToImage(string text)
         {
             Bitmap image = new Bitmap(200, 20, PixelFormat.Format24bppRgb);
 
